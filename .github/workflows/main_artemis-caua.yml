@@ -2,7 +2,7 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 # More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
 
-name: Build and deploy Python app to Azure Web App - Artemis-caua
+name: Build and deploy Python app to Azure Web App - ARTEMIS-CAUA
 
 on:
   push:
@@ -63,14 +63,14 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_54C935D6B5D2459CA30EEB16D967E1A3 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8E8BA94055BB40DB96756522444C2DB2 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_47B180752334498A9B905CFE474CB402 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_E312C77FC4D74195B65CCFE71CE0BAB7 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FC612B636D3D436C9988781580C9E778 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F1A6561F3B7A48809F696B8C09C19D19 }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: 'Artemis-caua'
+          app-name: 'ARTEMIS-CAUA'
           slot-name: 'Production'
           
