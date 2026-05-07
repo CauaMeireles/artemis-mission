@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Missão Artemis — Rumo à Lua e Além</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <!-- CABEÇALHO -->
+  <header>
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/200px-NASA_logo.svg.png"
+      alt="Logo NASA"
+      class="logo-nasa"
+    />
+    <img
+      src="https://www.nasa.gov/wp-content/uploads/2021/05/artemis-patch.png"
+      alt="Logo Missão Artemis"
+      class="logo-artemis"
+      onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/NASA_logo.svg/200px-NASA_logo.svg.png'"
+    />
+    <h1>🚀 Missão Artemis</h1>
+    <p class="subtitulo">O Retorno da Humanidade à Lua — e o Primeiro Passo para Marte</p>
+  </header>
+
+  <!-- SOBRE A MISSÃO -->
+  <section class="sobre">
+    <h2>🌕 O que é a Missão Artemis?</h2>
+    <p>
+      A <strong>Missão Artemis</strong> é o programa da NASA que tem como objetivo levar astronautas de volta à superfície da Lua
+      — incluindo a <strong>primeira mulher</strong> e a <strong>primeira pessoa negra</strong> a pisarem no solo lunar.
+    </p>
+    <p>
+      O nome "Artemis" vem da mitologia grega: ela é a irmã gêmea de Apolo — referência ao programa Apollo, que
+      levou o ser humano à Lua pela primeira vez em 1969.
+    </p>
+    <p>
+      Mas o objetivo vai além da Lua. A Artemis é a <strong>ponte para Marte</strong>: cada missão lunar nos ensina
+      a viver e trabalhar em ambientes extremos, desenvolvendo tecnologias que serão usadas nas futuras viagens ao Planeta Vermelho.
+    </p>
+  </section>
+
+  <!-- GALERIA DE IMAGENS -->
+  <section class="galeria">
+    <h2>📸 Galeria da Missão</h2>
+    <div class="cards">
+
+      <div class="card">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Artemis_I_launch_%28NHQ202211160016%29.jpg/640px-Artemis_I_launch_%28NHQ202211160016%29.jpg"
+          alt="Lançamento Artemis I"
+        />
+        <p>🚀 Lançamento do Artemis I — novembro de 2022</p>
+      </div>
+
+      <div class="card">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/FullMoon2010.jpg/640px-FullMoon2010.jpg"
+          alt="Lua Cheia"
+        />
+        <p>🌕 A Lua — nosso próximo destino habitado</p>
+      </div>
+
+      <div class="card">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/The_Earth_seen_from_Apollo_17.jpg/640px-The_Earth_seen_from_Apollo_17.jpg"
+          alt="Terra vista da Lua"
+        />
+        <p>🌍 A Terra vista do espaço — missão Apollo 17</p>
+      </div>
+
+      <div class="card">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/OSIRIS_Mars_true_color.jpg/640px-OSIRIS_Mars_true_color.jpg"
+          alt="Marte"
+        />
+        <p>🔴 Marte — o destino final da Artemis</p>
+      </div>
+
+      <div class="card">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Orion_Capsule_Illustration.jpg/640px-Orion_Capsule_Illustration.jpg"
+          alt="Cápsula Orion"
+          onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Suitcase_nuclear_device.jpg/1px-Suitcase_nuclear_device.jpg'; this.style.display='none'; this.parentElement.querySelector('p').innerText='🛸 Cápsula Orion — a nave da missão Artemis'"
+        />
+        <img
+          src="https://www.nasa.gov/wp-content/uploads/2023/08/orion-spacecraft-artemis.jpg"
+          alt="Cápsula Orion"
+          onerror="this.style.display='none'"
+        />
+        <p>🛸 Cápsula Orion — a nave que transporta os astronautas</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- IMPORTÂNCIA DA MISSÃO -->
+  <section class="importancia">
+    <h2>⭐ Por que a Artemis é importante?</h2>
+    <div class="motivos">
+
+      <div class="motivo">
+        <h3>👩‍🚀 Inclusão histórica</h3>
+        <p>Pela primeira vez, uma mulher e uma pessoa negra pisarão na Lua, abrindo um novo capítulo na exploração espacial.</p>
+      </div>
+
+      <div class="motivo">
+        <h3>🔬 Ciência avançada</h3>
+        <p>A missão vai estudar o Polo Sul da Lua, onde há indícios de água em forma de gelo — recurso essencial para futuras colonizações.</p>
+      </div>
+
+      <div class="motivo">
+        <h3>🌐 Cooperação internacional</h3>
+        <p>Mais de 20 países participam do programa, tornando a Artemis um símbolo de colaboração global pela ciência.</p>
+      </div>
+
+      <div class="motivo">
+        <h3>🚀 Caminho para Marte</h3>
+        <p>Cada missão lunar desenvolve tecnologias e experiências que serão usadas nas futuras viagens tripuladas a Marte.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- LINHA DO TEMPO -->
+  <section class="timeline">
+    <h2>📅 Fases da Missão</h2>
+    <ul>
+      <li><span>Artemis I (2022)</span> — Voo de teste sem tripulação ao redor da Lua ✅</li>
+      <li><span>Artemis II (2025)</span> — Primeiro voo tripulado ao redor da Lua 🔄</li>
+      <li><span>Artemis III (2026+)</span> — Pouso na superfície lunar com astronautas 🎯</li>
+      <li><span>Gateway (futuro)</span> — Estação espacial em órbita lunar como base de operações 🛸</li>
+      <li><span>Marte (2030s)</span> — Missão tripulada ao Planeta Vermelho 🔴</li>
+    </ul>
+  </section>
+
+  <!-- RODAPÉ -->
+  <footer>
+    <p>🚀 Projeto Escolar — <strong>Desafio: Missão Artemis no Git e Nuvem</strong></p>
+    <p>Desenvolvido com Flask · Hospedado no Microsoft Azure · Código no GitHub</p>
+    <p style="margin-top:8px; font-size:0.8rem; opacity:0.6;">Fontes: NASA.gov · Wikipedia · ESA</p>
+  </footer>
+
+</body>
+</html>
