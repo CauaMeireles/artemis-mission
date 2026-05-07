@@ -2,146 +2,850 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Missão Artemis — Rumo à Lua e Além</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Missão Artemis — Retorno à Lua</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    /* ── RESET & BASE ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --glass-bg:      rgba(255, 255, 255, 0.07);
+      --glass-border:  rgba(255, 255, 255, 0.18);
+      --glass-shadow:  0 8px 32px rgba(0, 0, 0, 0.45);
+      --blur:          blur(18px) saturate(180%);
+      --accent:        #c8a97e;
+      --accent-bright: #f0d4a8;
+      --text-primary:  #f0ece4;
+      --text-muted:    rgba(240, 236, 228, 0.55);
+      --radius:        20px;
+      --radius-sm:     12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text-primary);
+      background: #050810;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── COSMIC BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%,  rgba(90, 60, 140, 0.35) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 80%,  rgba(30, 70, 130, 0.30) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 60% 30%,  rgba(200, 169, 126, 0.10) 0%, transparent 50%),
+        url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/FullMoon2010.jpg/1200px-FullMoon2010.jpg') no-repeat 90% 15% / 260px auto;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* star field */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,.7) 0%, transparent 100%),
+        radial-gradient(1px 1px at 25% 55%, rgba(255,255,255,.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 40% 10%, rgba(255,255,255,.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 40%, rgba(255,255,255,.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 70%, rgba(255,255,255,.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 85% 25%, rgba(255,255,255,.5) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 15% 80%, rgba(255,255,255,.8) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 50%, rgba(255,255,255,.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 35% 90%, rgba(255,255,255,.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 60% 5%,  rgba(255,255,255,.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 78% 88%, rgba(255,255,255,.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 5%  45%, rgba(255,255,255,.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 48% 68%, rgba(200,200,255,.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 92% 12%, rgba(255,255,255,.7) 0%, transparent 100%),
+        radial-gradient(1px 1px at 3%  95%, rgba(255,255,255,.4) 0%, transparent 100%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── GLASS UTILITY ── */
+    .glass {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      box-shadow: var(--glass-shadow);
+      border-radius: var(--radius);
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section { padding: 80px 0; }
+
+    /* ── HEADER / NAV ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 24px;
+    }
+
+    nav {
+      max-width: 1160px;
+      margin: 16px auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 28px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border-radius: 60px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      height: 36px;
+      width: auto;
+      filter: drop-shadow(0 0 6px rgba(200,169,126,0.6));
+    }
+
+    .nav-logo span {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 0.08em;
+      color: var(--accent-bright);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover { color: var(--text-primary); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      padding: 60px 0 80px;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border: 1px solid rgba(200,169,126,0.35);
+      border-radius: 40px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      backdrop-filter: blur(8px);
+      background: rgba(200,169,126,0.08);
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 6px var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: .5; transform: scale(.8); }
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.8rem, 5vw, 4.4rem);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, #f0d4a8, #c8a97e, #a07d50);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin-bottom: 36px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      border-radius: 60px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all .25s;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #c8a97e, #9a7550);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(200,169,126,0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(200,169,126,0.45);
+    }
+
+    .btn-ghost {
+      background: var(--glass-bg);
+      color: var(--text-primary);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.12);
+      transform: translateY(-2px);
+    }
+
+    /* hero visual card */
+    .hero-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .hero-img-card {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+    }
+
+    .hero-img-card img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      display: block;
+      transition: transform .5s;
+    }
+
+    .hero-img-card:hover img { transform: scale(1.04); }
+
+    .hero-img-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 20px 20px 18px;
+      background: linear-gradient(to top, rgba(5,8,16,.85) 0%, transparent 100%);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .stat-pill {
+      padding: 16px 14px;
+      text-align: center;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-sm);
+    }
+
+    .stat-pill strong {
+      display: block;
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-bright);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-pill span {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      text-align: center;
+      margin-bottom: 52px;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .section-header h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+
+    .section-header p {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ── GALERIA ── */
+    .galeria { background: transparent; }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      box-shadow: var(--glass-shadow);
+      transition: transform .3s, box-shadow .3s;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.55);
+      border-color: rgba(200,169,126,0.35);
+    }
+
+    .card:first-child {
+      grid-column: span 2;
+    }
+
+    .card img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      display: block;
+      transition: transform .5s;
+    }
+
+    .card:first-child img { height: 300px; }
+
+    .card:hover img { transform: scale(1.05); }
+
+    .card p {
+      padding: 14px 16px 16px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      background: rgba(5,8,16,0.5);
+      backdrop-filter: blur(8px);
+    }
+
+    .card p .emoji { font-size: 1rem; margin-right: 4px; }
+
+    /* ── IMPORTÂNCIA ── */
+    .importancia { background: transparent; }
+
+    .importancia-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .info-card {
+      padding: 32px 28px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border-radius: var(--radius);
+      box-shadow: var(--glass-shadow);
+      transition: border-color .25s, transform .25s;
+    }
+
+    .info-card:hover {
+      border-color: rgba(200,169,126,0.3);
+      transform: translateY(-4px);
+    }
+
+    .info-card .icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: rgba(200,169,126,0.12);
+      border: 1px solid rgba(200,169,126,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 18px;
+    }
+
+    .info-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--accent-bright);
+    }
+
+    .info-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ── TIMELINE ── */
+    .timeline-section { background: transparent; }
+
+    .timeline {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 27px; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--glass-border), transparent);
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      padding: 24px 28px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border-radius: var(--radius);
+      box-shadow: var(--glass-shadow);
+      transition: border-color .25s;
+    }
+
+    .timeline-item:hover { border-color: rgba(200,169,126,0.3); }
+
+    .timeline-dot {
+      flex-shrink: 0;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(200,169,126,0.6);
+      margin-top: 5px;
+    }
+
+    .timeline-content strong {
+      display: block;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .timeline-content h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .timeline-content p {
+      font-size: 0.87rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 40px 24px;
+      text-align: center;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    footer p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* ── SCROLL ANIMATIONS ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .cards { grid-template-columns: 1fr 1fr; }
+      .card:first-child { grid-column: span 2; }
+      .importancia-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .cards { grid-template-columns: 1fr; }
+      .card:first-child { grid-column: span 1; }
+      .nav-links { display: none; }
+      .hero-stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- CABEÇALHO -->
+  <!-- ╔══════════ NAV ══════════╗ -->
   <header>
-    <img
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/200px-NASA_logo.svg.png"
-      alt="Logo NASA"
-      class="logo-nasa"
-    />
-    <img
-      src="https://www.nasa.gov/wp-content/uploads/2021/05/artemis-patch.png"
-      alt="Logo Missão Artemis"
-      class="logo-artemis"
-      onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/NASA_logo.svg/200px-NASA_logo.svg.png'"
-    />
-    <h1>🚀 Missão Artemis</h1>
-    <p class="subtitulo">O Retorno da Humanidade à Lua — e o Primeiro Passo para Marte</p>
-  </header>
-
-  <!-- SOBRE A MISSÃO -->
-  <section class="sobre">
-    <h2>🌕 O que é a Missão Artemis?</h2>
-    <p>
-      A <strong>Missão Artemis</strong> é o programa da NASA que tem como objetivo levar astronautas de volta à superfície da Lua
-      — incluindo a <strong>primeira mulher</strong> e a <strong>primeira pessoa negra</strong> a pisarem no solo lunar.
-    </p>
-    <p>
-      O nome "Artemis" vem da mitologia grega: ela é a irmã gêmea de Apolo — referência ao programa Apollo, que
-      levou o ser humano à Lua pela primeira vez em 1969.
-    </p>
-    <p>
-      Mas o objetivo vai além da Lua. A Artemis é a <strong>ponte para Marte</strong>: cada missão lunar nos ensina
-      a viver e trabalhar em ambientes extremos, desenvolvendo tecnologias que serão usadas nas futuras viagens ao Planeta Vermelho.
-    </p>
-  </section>
-
-  <!-- GALERIA DE IMAGENS -->
-  <section class="galeria">
-    <h2>📸 Galeria da Missão</h2>
-    <div class="cards">
-
-      <div class="card">
+    <nav>
+      <a href="#" class="nav-logo">
         <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Artemis_I_launch_%28NHQ202211160016%29.jpg/640px-Artemis_I_launch_%28NHQ202211160016%29.jpg"
-          alt="Lançamento Artemis I"
-        />
-        <p>🚀 Lançamento do Artemis I — novembro de 2022</p>
-      </div>
-
-      <div class="card">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/FullMoon2010.jpg/640px-FullMoon2010.jpg"
-          alt="Lua Cheia"
-        />
-        <p>🌕 A Lua — nosso próximo destino habitado</p>
-      </div>
-
-      <div class="card">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/The_Earth_seen_from_Apollo_17.jpg/640px-The_Earth_seen_from_Apollo_17.jpg"
-          alt="Terra vista da Lua"
-        />
-        <p>🌍 A Terra vista do espaço — missão Apollo 17</p>
-      </div>
-
-      <div class="card">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/OSIRIS_Mars_true_color.jpg/640px-OSIRIS_Mars_true_color.jpg"
-          alt="Marte"
-        />
-        <p>🔴 Marte — o destino final da Artemis</p>
-      </div>
-
-      <div class="card">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Orion_Capsule_Illustration.jpg/640px-Orion_Capsule_Illustration.jpg"
-          alt="Cápsula Orion"
-          onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Suitcase_nuclear_device.jpg/1px-Suitcase_nuclear_device.jpg'; this.style.display='none'; this.parentElement.querySelector('p').innerText='🛸 Cápsula Orion — a nave da missão Artemis'"
-        />
-        <img
-          src="https://www.nasa.gov/wp-content/uploads/2023/08/orion-spacecraft-artemis.jpg"
-          alt="Cápsula Orion"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Artemis_logo.svg/240px-Artemis_logo.svg.png"
+          alt="Artemis"
           onerror="this.style.display='none'"
         />
-        <p>🛸 Cápsula Orion — a nave que transporta os astronautas</p>
-      </div>
+        <span>ARTEMIS</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#missao">Missão</a></li>
+        <li><a href="#galeria">Galeria</a></li>
+        <li><a href="#importancia">Importância</a></li>
+        <li><a href="#cronograma">Cronograma</a></li>
+      </ul>
+      <a href="https://www.nasa.gov/artemis" target="_blank" class="btn btn-primary" style="padding:10px 22px;font-size:.8rem;">
+        NASA Oficial ↗
+      </a>
+    </nav>
+  </header>
 
+  <!-- ╔══════════ HERO ══════════╗ -->
+  <section class="hero" id="missao">
+    <div class="container">
+      <div class="hero-inner">
+
+        <div class="hero-text fade-up">
+          <div class="hero-badge">Programa Lunar</div>
+          <h1>
+            A humanidade<br />
+            retorna à<br />
+            <em>Lua.</em>
+          </h1>
+          <p class="hero-desc">
+            A Missão Artemis é o programa da NASA para levar astronautas de volta à superfície lunar — incluindo a primeira mulher e a primeira pessoa de cor — como passo essencial rumo a Marte.
+          </p>
+          <div class="hero-actions">
+            <a href="#galeria" class="btn btn-primary">Ver Galeria</a>
+            <a href="#importancia" class="btn btn-ghost">Por que importa?</a>
+          </div>
+        </div>
+
+        <div class="hero-visual fade-up" style="transition-delay:.15s">
+          <div class="hero-img-card">
+            <img
+              src="https://www.nasa.gov/wp-content/uploads/2022/11/artemis_1_launch_nhq202211160029.jpg"
+              alt="Lançamento Artemis I"
+              onerror="this.src='https://s2-epocanegocios.glbimg.com/hE0xx1m9DheDhrE5aJko3jkCgN8=/0x0:1280x1919/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_e536e40f1baf4c1a8bf1ed12d20577fd/internal_photos/bs/2022/F/3/a3eYStSS641eAUOY9V6Q/60-anniversary-moon-photo-1-.jpg'"
+            />
+            <div class="hero-img-caption">🚀 Lançamento Artemis I — novembro de 2022</div>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-pill">
+              <strong>3</strong>
+              <span>Missões previstas</span>
+            </div>
+            <div class="stat-pill">
+              <strong>384k</strong>
+              <span>km até a Lua</span>
+            </div>
+            <div class="stat-pill">
+              <strong>2025+</strong>
+              <span>Pouso lunar</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
-  <!-- IMPORTÂNCIA DA MISSÃO -->
-  <section class="importancia">
-    <h2>⭐ Por que a Artemis é importante?</h2>
-    <div class="motivos">
-
-      <div class="motivo">
-        <h3>👩‍🚀 Inclusão histórica</h3>
-        <p>Pela primeira vez, uma mulher e uma pessoa negra pisarão na Lua, abrindo um novo capítulo na exploração espacial.</p>
+  <!-- ╔══════════ GALERIA ══════════╗ -->
+  <section class="galeria" id="galeria">
+    <div class="container">
+      <div class="section-header fade-up">
+        <span class="section-label">Imagens</span>
+        <h2>Galeria da Missão</h2>
+        <p>Da plataforma de lançamento à superfície lunar — os momentos que definem a nova era da exploração espacial.</p>
       </div>
 
-      <div class="motivo">
-        <h3>🔬 Ciência avançada</h3>
-        <p>A missão vai estudar o Polo Sul da Lua, onde há indícios de água em forma de gelo — recurso essencial para futuras colonizações.</p>
-      </div>
+      <div class="cards">
 
-      <div class="motivo">
-        <h3>🌐 Cooperação internacional</h3>
-        <p>Mais de 20 países participam do programa, tornando a Artemis um símbolo de colaboração global pela ciência.</p>
-      </div>
+        <!-- Card 1 — destaque -->
+        <div class="card fade-up">
+          <img
+            src="https://brasiliainfoco.com/wp-content/uploads/2026/01/IMG_9915.webp"
+            alt="Foguete SLS"
+            onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/SLS_Artemis_I_liftoff.jpg/800px-SLS_Artemis_I_liftoff.jpg'"
+          />
+          <p><span class="emoji">🚀</span> Foguete SLS — o mais poderoso já construído pela NASA</p>
+        </div>
 
-      <div class="motivo">
-        <h3>🚀 Caminho para Marte</h3>
-        <p>Cada missão lunar desenvolve tecnologias e experiências que serão usadas nas futuras viagens tripuladas a Marte.</p>
-      </div>
+        <!-- Card 2 -->
+        <div class="card fade-up" style="transition-delay:.1s">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/5/52/Orion_Snaps_a_Selfie_During_External_Inspection_%28vertical%29.jpg"
+            alt="Cápsula Orion"
+            onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/FullMoon2010.jpg/800px-FullMoon2010.jpg'"
+          />
+          <p><span class="emoji">🛸</span> Cápsula Orion — a nave que transporta os astronautas</p>
+        </div>
 
+        <!-- Card 3 -->
+        <div class="card fade-up" style="transition-delay:.15s">
+          <img
+            src="https://www.astropt.org/blog/wp-content/uploads/2011/03/lado_mais_distante_Lua_LRO_WAC.jpg"
+            alt="Superfície Lunar"
+            onerror="this.style.display='none'"
+          />
+          <p><span class="emoji">🌕</span> Lua — destino da Artemis II e III</p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="card fade-up" style="transition-delay:.2s">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/c/ca/Lunar_module_AS12-51-7507.jpg"
+            alt="Astronauta em EVA"
+            onerror="this.style.display='none'"
+          />
+          <p><span class="emoji">👩‍🚀</span> Atividade extravehicular — exploração na superfície lunar</p>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="card fade-up" style="transition-delay:.25s">
+          <img
+            src="https://admin.cnnbrasil.com.br/wp-content/uploads/sites/12/2021/06/16240_1D7AA7DD39972FB5-1.jpg?w=1200&h=1200&crop=1"
+            alt="Marte — destino final"
+            onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/OSIRIS_Mars_true_color.jpg/800px-OSIRIS_Mars_true_color.jpg'"
+          />
+          <p><span class="emoji">🔴</span> Marte — o destino final da Artemis</p>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="card fade-up" style="transition-delay:.3s">
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvfJtx-RKsr7Mv2b0j78KcLhT28R08mRBwWw&s"
+            alt="Terra vista do espaço"
+            onerror="this.style.display='none'"
+          />
+          <p><span class="emoji">🌍</span> Terra — perspectiva única a partir da órbita lunar</p>
+        </div>
+
+      </div>
     </div>
   </section>
 
-  <!-- LINHA DO TEMPO -->
-  <section class="timeline">
-    <h2>📅 Fases da Missão</h2>
-    <ul>
-      <li><span>Artemis I (2022)</span> — Voo de teste sem tripulação ao redor da Lua ✅</li>
-      <li><span>Artemis II (2025)</span> — Primeiro voo tripulado ao redor da Lua 🔄</li>
-      <li><span>Artemis III (2026+)</span> — Pouso na superfície lunar com astronautas 🎯</li>
-      <li><span>Gateway (futuro)</span> — Estação espacial em órbita lunar como base de operações 🛸</li>
-      <li><span>Marte (2030s)</span> — Missão tripulada ao Planeta Vermelho 🔴</li>
-    </ul>
+  <!-- ╔══════════ IMPORTÂNCIA ══════════╗ -->
+  <section class="importancia" id="importancia">
+    <div class="container">
+      <div class="section-header fade-up">
+        <span class="section-label">Relevância</span>
+        <h2>Por que a Artemis é importante?</h2>
+        <p>Muito além de chegar à Lua — é sobre o que construímos para o futuro da humanidade no espaço.</p>
+      </div>
+
+      <div class="importancia-grid">
+        <div class="info-card fade-up">
+          <div class="icon">🔬</div>
+          <h3>Ciência e Descoberta</h3>
+          <p>O Polo Sul lunar nunca foi explorado. A Artemis vai estudar o gelo de água presente nos crateras — recurso essencial para futuras missões a Marte e além.</p>
+        </div>
+        <div class="info-card fade-up" style="transition-delay:.1s">
+          <div class="icon">🌐</div>
+          <h3>Cooperação Internacional</h3>
+          <p>22 países assinaram os Acordos Artemis, criando um marco de cooperação espacial inédito e consolidando normas para a exploração responsável da Lua.</p>
+        </div>
+        <div class="info-card fade-up" style="transition-delay:.15s">
+          <div class="icon">⚖️</div>
+          <h3>Inclusão e Diversidade</h3>
+          <p>Pela primeira vez na história, uma mulher e uma pessoa de cor pisarão na superfície lunar, expandindo o que é possível para as gerações seguintes.</p>
+        </div>
+        <div class="info-card fade-up" style="transition-delay:.2s">
+          <div class="icon">🚀</div>
+          <h3>Caminho a Marte</h3>
+          <p>A Lua será a base de testes para tecnologias de suporte à vida, propulsão e habitação que permitirão ao ser humano alcançar Marte na década de 2030.</p>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <!-- RODAPÉ -->
+  <!-- ╔══════════ CRONOGRAMA ══════════╗ -->
+  <section class="timeline-section" id="cronograma">
+    <div class="container">
+      <div class="section-header fade-up">
+        <span class="section-label">Cronograma</span>
+        <h2>Linha do Tempo</h2>
+        <p>De Artemis I ao primeiro pouso tripulado desde o Apollo 17 em 1972.</p>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item fade-up">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <strong>Novembro 2022</strong>
+            <h4>Artemis I — Voo de Teste</h4>
+            <p>Missão não tripulada que validou o foguete SLS e a cápsula Orion em órbita lunar. 25 dias de missão, encerrada com sucesso.</p>
+          </div>
+        </div>
+        <div class="timeline-item fade-up" style="transition-delay:.1s">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <strong>Previsto 2025</strong>
+            <h4>Artemis II — Primeiro Voo Tripulado</h4>
+            <p>Quatro astronautas farão a primeira jornada tripulada ao redor da Lua desde 1972, sem pousar na superfície.</p>
+          </div>
+        </div>
+        <div class="timeline-item fade-up" style="transition-delay:.2s">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <strong>Previsto 2026</strong>
+            <h4>Artemis III — Pouso Histórico</h4>
+            <p>A missão que colocará humanos de volta à superfície lunar, no Polo Sul — região jamais visitada pelo programa Apollo.</p>
+          </div>
+        </div>
+        <div class="timeline-item fade-up" style="transition-delay:.3s">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <strong>Futuro</strong>
+            <h4>Gateway — Estação Orbital Lunar</h4>
+            <p>Plataforma permanente em órbita lunar que servirá de base para exploração contínua da Lua e para missões interplanetárias a Marte.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ╔══════════ FOOTER ══════════╗ -->
   <footer>
-    <p>🚀 Projeto Escolar — <strong>Desafio: Missão Artemis no Git e Nuvem</strong></p>
-    <p>Desenvolvido com Flask · Hospedado no Microsoft Azure · Código no GitHub</p>
-    <p style="margin-top:8px; font-size:0.8rem; opacity:0.6;">Fontes: NASA.gov · Wikipedia · ESA</p>
+    <p>
+      Projeto Artemis — Trabalho Acadêmico &nbsp;|&nbsp;
+      Dados: <a href="https://www.nasa.gov/artemis" target="_blank">NASA Artemis Program</a> &nbsp;|&nbsp;
+      Desenvolvido por Cauã Meireles com Flask + Azure
+    </p>
   </footer>
+
+  <!-- ╔══════════ SCRIPTS ══════════╗ -->
+  <script>
+    // Intersection Observer para animações fade-up
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
 
 </body>
 </html>
